@@ -25,7 +25,6 @@ public class BGBSubService extends IntentService {
 
     private static String NAME = BGBSubService.class.getSimpleName();
     protected static final int MESSAGES_NOTIFICATION_ID = 108;
-    private static final int NUM_MESSAGES_IN_NOTIFICATION = 5;
 
     public BGBSubService() {
         super(NAME);
@@ -34,14 +33,16 @@ public class BGBSubService extends IntentService {
     @Override
     public void onCreate() {
         super.onCreate();
+        Log.i(TAG, "onCreate...");
+
 //        updateNotification();
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        if (intent != null) {
-            Log.i(TAG, "onHandleIntent...");
+        Log.i(TAG, "onHandleIntent...");
 
+        if (intent != null) {
             Nearby.Messages.handleIntent(intent, new MessageListener() {
                 @Override
                 public void onFound(Message message) {
@@ -95,7 +96,7 @@ public class BGBSubService extends IntentService {
                 .setSmallIcon(android.R.drawable.star_on)
                 .setContentTitle(contentTitle)
                 .setContentText(contentText)
-                .setAutoCancel(true)
+//                .setAutoCancel(true)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(contentTitle))
                 .setOngoing(true)
                 .setContentIntent(pi);

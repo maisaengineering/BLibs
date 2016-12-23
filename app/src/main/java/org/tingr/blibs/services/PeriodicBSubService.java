@@ -93,7 +93,7 @@ public class PeriodicBSubService extends IntentService {
                 .setSmallIcon(android.R.drawable.stat_sys_warning)
                 .setContentTitle(contentTitle)
                 .setContentText(contentText)
-                .setAutoCancel(true)
+//                .setAutoCancel(true)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(contentTitle))
                 .setOngoing(true)
                 .setContentIntent(pIntent);
@@ -119,7 +119,7 @@ public class PeriodicBSubService extends IntentService {
                 .setSmallIcon(android.R.drawable.stat_sys_warning)
                 .setContentTitle(contentTitle)
                 .setContentText(contentText)
-                .setAutoCancel(true)
+//                .setAutoCancel(true)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(contentTitle))
                 .setOngoing(true)
                 .setContentIntent(pIntent);

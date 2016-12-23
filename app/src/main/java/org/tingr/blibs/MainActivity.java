@@ -36,10 +36,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign);
-        if (!PermissionsAsk.havePermissions(MainActivity.this)) {
-            // call for permission check
-            Intent intent = new Intent(getApplicationContext(), PermissionsAsk.class);
-            startActivityForResult(intent, PERMISSIONS_REQUEST_CODE);
-        }
+//        if (!PermissionsAsk.havePermissions(MainActivity.this)) {
+//            // call for permission check
+//            Intent intent = new Intent(getApplicationContext(), PermissionsAsk.class);
+//            startActivityForResult(intent, PERMISSIONS_REQUEST_CODE);
+//        }
     }
 }
