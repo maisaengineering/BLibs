@@ -108,7 +108,7 @@ public class BGBSubService extends IntentService {
                 .setSmallIcon(android.R.drawable.star_on)
                 .setContentTitle(contentTitle)
                 .setContentText(contentText)
-//                .setAutoCancel(true)
+                .setAutoCancel(true)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(contentTitle))
                 .setOngoing(true)
                 .setContentIntent(pi);

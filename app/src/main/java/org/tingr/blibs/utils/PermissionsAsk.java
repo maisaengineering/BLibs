@@ -32,7 +32,6 @@ public class PermissionsAsk extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
         if (havePermissions(PermissionsAsk.this)) {
             returnAsSuccessful();
         } else {
