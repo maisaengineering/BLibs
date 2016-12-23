@@ -6,25 +6,16 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
-import android.text.TextUtils;
-import android.util.Base64;
 import android.util.Log;
 
 import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Distance;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
 
 import org.tingr.blibs.MainActivity;
-import org.tingr.blibs.R;
-import org.tingr.blibs.Utils;
 import org.tingr.blibs.dto.ParentAttachment;
 import org.tingr.blibs.utils.GsonHelper;
-
-import java.util.List;
 
 /**
  * Created by imaginationcoder on 12/13/16.
@@ -45,7 +36,6 @@ public class BGBSubService extends IntentService {
         super.onCreate();
 //        updateNotification();
     }
-
 
     @Override
     protected void onHandleIntent(Intent intent) {
@@ -80,16 +70,13 @@ public class BGBSubService extends IntentService {
     }
 
     private void updateNotification(Message message) {
-//        List<String> messages = Utils.getCachedMessages(getApplicationContext());
-
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        if(message == null){
+        if (message == null) {
             notificationManager.cancel(MESSAGES_NOTIFICATION_ID);
             return;
         }
 
-//        byte[] contentBytes = Base64.decode(message.getContent(), Base64.NO_WRAP);
         String contentStr = new String(message.getContent());
         ParentAttachment parentAttachment = GsonHelper.INSTANCE.fromJson(contentStr, ParentAttachment.class);
 
@@ -114,22 +101,5 @@ public class BGBSubService extends IntentService {
                 .setContentIntent(pi);
 
         notificationManager.notify(MESSAGES_NOTIFICATION_ID, notificationBuilder.build());
-    }
-
-    private String getContentTitle(boolean isFound) {
-        if(isFound){
-            return getResources().getString(R.string.one_message);
-        }else{
-            return getResources().getString(R.string.scanning);
-        }
-    }
-
-    private String getContentText(List<String> messages) {
-        String newline = System.getProperty("line.separator");
-        if (messages.size() < NUM_MESSAGES_IN_NOTIFICATION) {
-            return TextUtils.join(newline, messages);
-        }
-        return TextUtils.join(newline, messages.subList(0, NUM_MESSAGES_IN_NOTIFICATION)) +
-                newline + "&#8230;";
     }
 }

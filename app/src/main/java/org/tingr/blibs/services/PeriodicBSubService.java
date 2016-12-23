@@ -1,20 +1,15 @@
 package org.tingr.blibs.services;
 
-import android.Manifest;
 import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -30,17 +25,18 @@ import com.google.android.gms.nearby.messages.Strategy;
 import com.google.android.gms.nearby.messages.SubscribeCallback;
 import com.google.android.gms.nearby.messages.SubscribeOptions;
 
-import org.tingr.blibs.BuildConfig;
-import org.tingr.blibs.MainActivity;
-import org.tingr.blibs.R;
-import org.tingr.blibs.Utils;
 import org.tingr.blibs.utils.PermissionsAsk;
-
-import java.util.concurrent.TimeUnit;
+import org.tingr.blibs.utils.Utils;
 
 public class PeriodicBSubService extends IntentService {
     private static final String TAG = PeriodicBSubService.class.getName();
     protected static final int PERMISSION_NOTIFICATION_ID = 1001;
+
+    private static final String PERMISSION_RATIONALE_NOTIFY = "%s requires permissions";
+    private static final String PERMISSION_RATIONALE_NOTIFY_TXT = "Tap to allow";
+
+    private static final String BLUETOOTH_RATIONALE_NOTIFY = "%s requires BLUETOOTH";
+    private static final String BLUETOOTH_RATIONALE_NOTIFY_TXT = "Turn-on now";
 
     private static String NAME = BGBSubService.class.getSimpleName();
     private GoogleApiClient mGoogleApiClient;
@@ -67,7 +63,7 @@ public class PeriodicBSubService extends IntentService {
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         // MUST BE ON
-        if(!Utils.isBluetoothAvailable()){
+        if (!Utils.isBluetoothAvailable()) {
             notifyAsBluetoothReqd();
         } else if (PermissionsAsk.havePermissions(this)) {
             // clear notification(s)
@@ -91,8 +87,8 @@ public class PeriodicBSubService extends IntentService {
         PendingIntent pIntent = PendingIntent.getActivity(getApplicationContext(), 0,
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        String contentTitle = String.format(getString(R.string.bluetooth_rationale_notify), getAppName(this));
-        String contentText = getString(R.string.bluetooth_rationale_notify_txt);
+        String contentTitle = String.format(BLUETOOTH_RATIONALE_NOTIFY, getAppName(this));
+        String contentText = BLUETOOTH_RATIONALE_NOTIFY_TXT;
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(android.R.drawable.stat_sys_warning)
                 .setContentTitle(contentTitle)
@@ -117,8 +113,8 @@ public class PeriodicBSubService extends IntentService {
         PendingIntent pIntent = PendingIntent.getActivity(getApplicationContext(), 0,
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        String contentTitle = String.format(getString(R.string.permission_rationale_notify), getAppName(this));
-        String contentText = getString(R.string.permission_rationale_notify_txt);
+        String contentTitle = String.format(PERMISSION_RATIONALE_NOTIFY, getAppName(this));
+        String contentText = PERMISSION_RATIONALE_NOTIFY_TXT;
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(android.R.drawable.stat_sys_warning)
                 .setContentTitle(contentTitle)

@@ -1,24 +1,12 @@
-package org.tingr.blibs;
+package org.tingr.blibs.utils;
+
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.text.TextUtils;
-
-import com.google.android.gms.nearby.messages.Message;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import org.tingr.blibs.services.PeriodicBSubService;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 /**
  * Created by imaginationcoder on 12/14/16.
  */

@@ -1,14 +1,7 @@
 package org.tingr.blibs.utils;
 
-import android.app.AlarmManager;
 import android.app.IntentService;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
-
-import org.tingr.blibs.Utils;
-import org.tingr.blibs.services.PeriodicBSubService;
 
 /**
  * Created by imaginationcoder on 12/22/16.

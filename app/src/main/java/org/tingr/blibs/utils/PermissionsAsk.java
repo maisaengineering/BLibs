@@ -6,9 +6,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -19,13 +19,18 @@ import android.widget.FrameLayout;
 
 import org.tingr.blibs.BuildConfig;
 import org.tingr.blibs.R;
-import org.tingr.blibs.Utils;
 
 public class PermissionsAsk extends AppCompatActivity {
     private static final String TAG = PermissionsAsk.class.getName();
+    public static String SCHEDULE_PERIODIC_SERVICE;
 
     private static final int PERMISSIONS_REQUEST_CODE = 101;
-    public static String SCHEDULE_PERIODIC_SERVICE;
+    public static final String OK = "OK";
+    public static final String PACKAGE = "package";
+    public static final String SETTINGS = "Settings";
+
+    public static final String PERMISSION_RATIONALE = "Location permission is req'd.";
+    public static final String PERMISSION_DENIED_EXPLANATION = "While we wait, provide req'd permissions by going to " + SETTINGS;
 
     private FrameLayout mContainer;
 
@@ -33,25 +38,24 @@ public class PermissionsAsk extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if (havePermissions(PermissionsAsk.this)) {
+            Log.i(TAG, "***HAVE ALL PERMISSIONS FOR NOW***");
             returnAsSuccessful();
-        } else {
-            Log.i(TAG, "ONRESUME::Requesting permissions needed for this app.");
-            requestPermissions();
         }
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (havePermissions(PermissionsAsk.this)) {
+            returnAsSuccessful();
+        }
+
         setContentView(R.layout.activity_permissions_ask);
         // grab holder
         this.mContainer = (FrameLayout) findViewById(R.id.container);
 
         // permissions check
-        if (havePermissions(PermissionsAsk.this)) {
-            Log.i(TAG, "***HAVE ALL PERMISSIONS FOR NOW***");
-            returnAsSuccessful();
-        } else {
+        if (!havePermissions(PermissionsAsk.this)) {
             Log.i(TAG, "CREATE::Requesting permissions needed for this app.");
             requestPermissions();
         }
@@ -96,15 +100,15 @@ public class PermissionsAsk extends AppCompatActivity {
         }
 
         Snackbar.make(mContainer,
-                R.string.permission_denied_explanation,
+                PERMISSION_DENIED_EXPLANATION,
                 Snackbar.LENGTH_INDEFINITE)
-                .setAction(R.string.settings, new View.OnClickListener() {
+                .setAction(SETTINGS, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         // go to APP SETTINGS
                         Intent intent = new Intent();
                         intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                        Uri uri = Uri.fromParts("package",
+                        Uri uri = Uri.fromParts(PACKAGE,
                                 BuildConfig.APPLICATION_ID, null);
                         intent.setData(uri);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -117,9 +121,9 @@ public class PermissionsAsk extends AppCompatActivity {
         if (mContainer == null) {
             return;
         }
-        Snackbar.make(mContainer, R.string.permission_rationale,
+        Snackbar.make(mContainer, PERMISSION_RATIONALE,
                 Snackbar.LENGTH_INDEFINITE)
-                .setAction(R.string.ok, new View.OnClickListener() {
+                .setAction(OK, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         // Request permission.
