@@ -1,10 +1,12 @@
-package org.tingr.blibs;
+package org.tingr.blibs.demo;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
+import org.tingr.blibs.R;
 import org.tingr.blibs.utils.PermissionsAsk;
 import org.tingr.blibs.utils.Utils;
 
@@ -25,10 +27,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Log.i(TAG, "On RESUME scheduling task...");
+
         if (!PermissionsAsk.havePermissions(MainActivity.this)) {
+            Log.i(TAG, "need permission. asking now...");
+
             // call for permission check
             Intent intent = new Intent(getApplicationContext(), PermissionsAsk.class);
             startActivityForResult(intent, PERMISSIONS_REQUEST_CODE);
+        }else{
+            Log.i(TAG, "scheduling now...");
+            Utils.schedulePeriodicTask(MainActivity.this);
         }
     }
 

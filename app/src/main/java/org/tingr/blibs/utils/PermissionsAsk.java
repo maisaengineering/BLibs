@@ -173,10 +173,10 @@ public class PermissionsAsk extends AppCompatActivity {
 
     public static String[] permissionsToAsk() {
         String[] permissionsToAsk = new String[]{
-                Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.RECEIVE_BOOT_COMPLETED,
                 Manifest.permission.WAKE_LOCK,
-                Manifest.permission.INTERNET
+                Manifest.permission.INTERNET,
+                Manifest.permission.ACCESS_FINE_LOCATION
         };
 
         return permissionsToAsk;

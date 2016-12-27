@@ -2,6 +2,7 @@ package org.tingr.blibs.utils;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.util.Log;
 
 /**
  * Created by imaginationcoder on 12/22/16.
@@ -16,6 +17,7 @@ public class BootCompleteService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        Log.i(TAG, "onHandleIntent...");
         /**
          * PERIODIC SERVICE TO HANDLE BEACON SCANS IN THE BACKGROUND - HANDLES UNLOCKED STATE
          * This wont handle if app is killed by user
