@@ -1,4 +1,4 @@
-package org.tingr.blibs.utils;
+package org.tingr.blibs.demo;
 
 import android.util.Base64;
 

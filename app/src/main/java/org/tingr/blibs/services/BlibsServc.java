@@ -63,25 +63,32 @@ public class BlibsServc extends IntentService {
 
     public void handleCommand(Intent intent) {
         Log.d(TAG, "handleCommand..." + intent);
+        try {
+
 //        Log.i(TAG, "1. TS_TOUCHED = " + BlibsServc.TS_TOUCHED + "...thread..." + Thread.currentThread());
 
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        // MUST BE ON
-        if (!Utils.isBluetoothAvailable()) {
-            notifyAsBluetoothReqd();
-        } else if (PermissionsAsk.havePermissions(this)) {
-            // clear notification(s)
-            notificationManager.cancel(PERMISSION_NOTIFICATION_ID);
-            // connect to google api
-            buildGoogleApiClient();
-            return;
-        } else {
-            notifyAsPermissionsPending();
-        }
+            NotificationManager notificationManager =
+                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            // MUST BE ON
+            if (!Utils.isBluetoothAvailable()) {
+                notifyAsBluetoothReqd();
+            } else if (PermissionsAsk.havePermissions(this)) {
+                // clear notification(s)
+                notificationManager.cancel(PERMISSION_NOTIFICATION_ID);
+                // connect to google api
+                buildGoogleApiClient();
+                return;
+            } else {
+                notifyAsPermissionsPending();
+            }
 
-        // disconnect by default on permission issues
-        mGoogleApiClient.disconnect();
+            // disconnect by default on permission issues
+            if (mGoogleApiClient != null) {
+                mGoogleApiClient.disconnect();
+            }
+        } catch (Throwable t) {
+            // muted
+        }
     }
 
 

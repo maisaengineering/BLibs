@@ -1,18 +1,9 @@
 package org.tingr.blibs.demo;
 
-import android.app.Application;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-
-import com.google.android.gms.nearby.messages.Message;
-
-import org.tingr.blibs.dto.ParentAttachment;
-import org.tingr.blibs.utils.GsonHelper;
 
 public class BlibsReceiver extends BroadcastReceiver {
     private static final String TAG = BlibsReceiver.class.getName();

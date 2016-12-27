@@ -1,4 +1,4 @@
-package org.tingr.blibs.utils;
+package org.tingr.blibs.services;
 
 import android.content.Context;
 import android.content.Intent;
