@@ -5,7 +5,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -52,12 +51,20 @@ public class BlibsServc extends IntentService {
 
     @Override
     public void onStart(Intent intent, int startId) {
-        handleCommand(intent);
+        try {
+            handleCommand(intent);
+        } catch (Throwable t) {
+            // muted
+        }
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        handleCommand(intent);
+        try {
+            handleCommand(intent);
+        } catch (Throwable t) {
+            // muted
+        }
         return START_STICKY;
     }
 

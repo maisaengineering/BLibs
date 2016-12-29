@@ -16,6 +16,12 @@ public final class Utils {
     private static final String TAG = Utils.class.getName();
 
     public static final String BROADCAST_KEY_DETECTED = "org.tingr.blibs.DETECTED";
+    public static enum BEACON {
+        STATE,
+        FOUND,
+        LOST,
+        DATA,
+    };
 
     public static void schedulePeriodicTask(Context aContext) {
         try {

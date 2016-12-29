@@ -15,14 +15,9 @@ public class BTStateChangeReceiver extends WakefulBroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.i(TAG, "onReceive..." + intent);
-        String action = intent.getAction();
-
-        if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
+        if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(intent.getAction())) {
             int currState = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, -1);
-            Log.i(TAG, "STATE..." + currState);
-            if (BluetoothAdapter.STATE_OFF == currState) {
-                Log.i(TAG, "scheduling scans");
+            if (BluetoothAdapter.STATE_OFF == currState || BluetoothAdapter.STATE_ON == currState) {
                 Intent service = new Intent(context, BootCompleteService.class);
                 startWakefulService(context, service);
             }

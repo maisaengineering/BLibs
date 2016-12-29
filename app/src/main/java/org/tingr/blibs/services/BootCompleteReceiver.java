@@ -12,8 +12,6 @@ public class BootCompleteReceiver extends WakefulBroadcastReceiver {
     private static final String TAG = BootCompleteReceiver.class.getName();
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.i(TAG, "onReceive...");
-
         Intent service = new Intent(context, BootCompleteService.class);
         startWakefulService(context, service);
     }

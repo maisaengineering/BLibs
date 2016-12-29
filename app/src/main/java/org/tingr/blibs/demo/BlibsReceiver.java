@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import org.tingr.blibs.utils.Utils;
+
 public class BlibsReceiver extends BroadcastReceiver {
     private static final String TAG = BlibsReceiver.class.getName();
 
@@ -15,8 +17,18 @@ public class BlibsReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         // TODO: This method is called when the BroadcastReceiver is receiving
         // an Intent broadcast.
-        Log.i(TAG, "onReceive...");
-        Log.d(TAG, intent.toString());
+        Log.i(TAG, "onReceive..." + intent);
+        // read detection state
+        String state = intent.getStringExtra(Utils.BEACON.STATE.name());
+        if (state != null && (state.equals(Utils.BEACON.FOUND.name()) || state.equals(Utils.BEACON.LOST.name()))) {
+            // grab attachment data
+            byte[] data = intent.getByteArrayExtra(Utils.BEACON.DATA.name());
+            Log.i(TAG, "state..." + state);
+            Log.i(TAG, "data..." + new String(data));
+        } else {
+            Log.w(TAG, "***UN-KNOWN STATE *** ");
+        }
+
     }
 
 

@@ -45,10 +45,11 @@ public class BGBSubService extends IntentService {
                             "/" + message.getType());
                     Log.i(TAG, "intent..." + intent);
 
-                    Intent broadcastIntent = new Intent();
-                    broadcastIntent.setAction(Utils.BROADCAST_KEY_DETECTED);
-                    broadcastIntent.putExtra("Message", message);
-                    sendBroadcast(intent);
+                    Intent bIntent = new Intent();
+                    bIntent.setAction(Utils.BROADCAST_KEY_DETECTED);
+                    bIntent.putExtra(Utils.BEACON.STATE.name(), Utils.BEACON.FOUND.name());
+                    bIntent.putExtra(Utils.BEACON.DATA.name(), message.getContent());
+                    sendBroadcast(bIntent);
                 } catch (Throwable t) {
                     // muted
                 } finally {
@@ -62,6 +63,11 @@ public class BGBSubService extends IntentService {
             public void onLost(Message message) {
                 try {
                     Log.i(TAG, "onLost message = " + message);
+                    Intent bIntent = new Intent();
+                    bIntent.setAction(Utils.BROADCAST_KEY_DETECTED);
+                    bIntent.putExtra(Utils.BEACON.STATE.name(), Utils.BEACON.LOST.name());
+                    bIntent.putExtra(Utils.BEACON.DATA.name(), message.getContent());
+                    sendBroadcast(bIntent);
                 } catch (Throwable t) {
                     // muted
                 } finally {
