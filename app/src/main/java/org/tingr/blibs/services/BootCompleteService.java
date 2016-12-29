@@ -4,8 +4,6 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
 
-import org.tingr.blibs.utils.Utils;
-
 /**
  * Created by imaginationcoder on 12/22/16.
  */

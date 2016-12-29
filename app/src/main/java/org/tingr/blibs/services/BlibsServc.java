@@ -3,10 +3,10 @@ package org.tingr.blibs.services;
 import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
@@ -26,20 +26,17 @@ import com.google.android.gms.nearby.messages.SubscribeCallback;
 import com.google.android.gms.nearby.messages.SubscribeOptions;
 
 import org.tingr.blibs.utils.PermissionsAsk;
-import org.tingr.blibs.utils.Utils;
-
-import java.lang.ref.WeakReference;
 
 public class BlibsServc extends IntentService {
     private static final String TAG = BlibsServc.class.getName();
-    public static final String SERVC_NAME = "org.tingr.blibs.service";
+    protected static final String SERVC_NAME = "org.tingr.blibs.service";
     protected static final int PERMISSION_NOTIFICATION_ID = 1001;
 
     private static final String PERMISSION_RATIONALE_NOTIFY = "%s requires permissions";
     private static final String PERMISSION_RATIONALE_NOTIFY_TXT = "Tap to allow";
 
-    private static final String BLUETOOTH_RATIONALE_NOTIFY = "%s requires BLUETOOTH";
-    private static final String BLUETOOTH_RATIONALE_NOTIFY_TXT = "Turn-on now";
+    private static final String BLUETOOTH_RATIONALE_NOTIFY = "%s requires Bluetooth";
+    private static final String BLUETOOTH_RATIONALE_NOTIFY_TXT = "Tap to turn-on";
 
     private static String NAME = BlibsServc.class.getSimpleName();
 
@@ -71,17 +68,15 @@ public class BlibsServc extends IntentService {
     public void handleCommand(Intent intent) {
         Log.d(TAG, "handleCommand..." + intent);
         try {
-
-//        Log.i(TAG, "1. TS_TOUCHED = " + BlibsServc.TS_TOUCHED + "...thread..." + Thread.currentThread());
-
-            NotificationManager notificationManager =
-                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             // MUST BE ON
-            if (!Utils.isBluetoothAvailable()) {
+            if (!isBluetoothAvailable()) {
                 notifyAsBluetoothReqd();
             } else if (PermissionsAsk.havePermissions(this)) {
                 // clear notification(s)
-                notificationManager.cancel(PERMISSION_NOTIFICATION_ID);
+                NotificationManager nManager =
+                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                nManager.cancel(PERMISSION_NOTIFICATION_ID);
+
                 // connect to google api
                 buildGoogleApiClient();
                 return;
@@ -89,8 +84,8 @@ public class BlibsServc extends IntentService {
                 notifyAsPermissionsPending();
             }
 
-            // disconnect by default on permission issues
-            if (mGoogleApiClient != null) {
+            // disconnect by default on permission failure
+            if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
                 mGoogleApiClient.disconnect();
             }
         } catch (Throwable t) {
@@ -142,7 +137,7 @@ public class BlibsServc extends IntentService {
                 }
             }
         };
-        Nearby.Messages.subscribe(mGoogleApiClient, getBGPIntent(), subOptions(subCallbakBG))
+        Nearby.Messages.subscribe(mGoogleApiClient, getBGPIntent(), subOptions(getApplicationContext(), subCallbakBG))
                 .setResultCallback(new ResultCallback<Status>() {
                     @Override
                     public void onResult(@NonNull Status status) {
@@ -195,7 +190,16 @@ public class BlibsServc extends IntentService {
         return "TINGR";
     }
 
-    public static SubscribeOptions subOptions(SubscribeCallback subsCallbak) {
+    public static SubscribeOptions subOptions(Context contest, SubscribeCallback subsCallbak) {
+        String namespace = Utils.getValForKey(contest, Utils.INIT_NAMESPACE);
+        if(namespace == null){
+            throw new IllegalStateException(String.format("'%s' is missing from Manifest.", Utils.INIT_NAMESPACE));
+        }
+        String type = Utils.getValForKey(contest, Utils.INIT_TYPE);
+        if(type == null){
+            throw new IllegalStateException(String.format("'%s' is missing from Manifest.", Utils.INIT_TYPE));
+        }
+
         // strategy
 //        Strategy strategy = new Strategy.Builder().setTtlSeconds(Strategy.TTL_SECONDS_INFINITE).zzlP(2).build();
         return new SubscribeOptions.Builder()
@@ -203,7 +207,7 @@ public class BlibsServc extends IntentService {
 //                .setStrategy(strategy)
                 .setStrategy(Strategy.BLE_ONLY)
                 .setFilter(new MessageFilter.Builder()
-                        .includeNamespacedType("tingr-152315", "parent")
+                        .includeNamespacedType(namespace, type)
                         .build()).build();
     }
 
@@ -259,16 +263,18 @@ public class BlibsServc extends IntentService {
         notificationManager.notify(PERMISSION_NOTIFICATION_ID, notificationBuilder.build());
     }
 
-    private static final class LocalHandler extends Handler {
-        private final WeakReference<BlibsServc> mParent;
-
-        public LocalHandler(BlibsServc parent) {
-            mParent = new WeakReference<BlibsServc>(parent);
-        }
-    }
-
     @Override
     protected void onHandleIntent(Intent intent) {
 
+    }
+
+    /**
+     * Check for Bluetooth.
+     *
+     * @return True if Bluetooth is available.
+     */
+    static boolean isBluetoothAvailable() {
+        final BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        return (bluetoothAdapter != null && bluetoothAdapter.isEnabled());
     }
 }

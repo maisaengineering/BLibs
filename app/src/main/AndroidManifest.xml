@@ -16,13 +16,31 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@android:style/Theme.NoTitleBar">
+
+        <!-- ####################### -->
+        <!-- LIBRARY INITIALIZERS & CALLBACKS -->
+        <!-- ####################### -->
+        <meta-data
+            android:name="org.tingr.blibs.init.type"
+            android:value="parent" />
+        <meta-data
+            android:name="org.tingr.blibs.init.namespace"
+            android:value="tingr-152315" />
         <meta-data
             android:name="com.google.android.nearby.messages.API_KEY"
             android:value="AIzaSyCM9KoMI_iXz9MLaOLBKlOeh0ATuS2FoVI" />
-        <!-- BEACON SCANNING SERVICE - BACKGROUND -->
-        <service
-            android:name=".services.BGBSubService"
-            android:exported="false" />
+
+        <meta-data
+            android:name="org.tingr.blibs.callback.found"
+            android:value="org.tingr.blibs.iDETECTED" />
+        <meta-data
+            android:name="org.tingr.blibs.callback.lost"
+            android:value="org.tingr.blibs.iDETECTED" />
+
+        <!-- ####################### -->
+        <!-- SERVICES -->
+        <!-- ####################### -->
+        <!-- DAEMON SERVICE -->
         <service
             android:name=".services.BlibsServc"
             android:enabled="true"
@@ -33,16 +51,24 @@
                 <action android:name="org.tingr.blibs.service" />
             </intent-filter>
         </service>
+        <!-- Bootcomplete service. Called by corresponding receiver. @See BootCompleteReceiver -->
         <service
             android:name=".services.BootCompleteService"
             android:exported="false" />
-
+        <!-- BEACON SCAN -->
+        <service
+            android:name=".services.BGBSubService"
+            android:exported="false" />
+        <!-- PERMISSIONS Checker-->
         <activity
             android:name=".utils.PermissionsAsk"
-            android:label="@string/app_name"
+            android:exported="false"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
-        <!-- ON DEVICE BOOT -->
+        <!-- ####################### -->
+        <!-- RECEIVERS -->
+        <!-- ####################### -->
+        <!-- DEVICE BOOT -->
         <receiver
             android:name=".services.BootCompleteReceiver"
             android:enabled="true">
@@ -51,11 +77,12 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
+        <!-- BLUETOOTH -->
         <receiver
             android:name=".services.BTStateChangeReceiver"
             android:enabled="true">
             <intent-filter>
-                <action android:name="android.bluetooth.adapter.action.STATE_CHANGED"/>
+                <action android:name="android.bluetooth.adapter.action.STATE_CHANGED" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
@@ -68,7 +95,7 @@
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="org.tingr.blibs.DETECTED" />
+                <action android:name="org.tingr.blibs.iDETECTED" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>

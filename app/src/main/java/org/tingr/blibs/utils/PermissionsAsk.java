@@ -13,12 +13,12 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
 import org.tingr.blibs.BuildConfig;
 import org.tingr.blibs.R;
+import org.tingr.blibs.services.Utils;
 
 public class PermissionsAsk extends AppCompatActivity {
     private static final String TAG = PermissionsAsk.class.getName();
@@ -38,7 +38,6 @@ public class PermissionsAsk extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if (havePermissions(PermissionsAsk.this)) {
-            Log.i(TAG, "***HAVE ALL PERMISSIONS FOR NOW***");
             returnAsSuccessful();
         }
     }
@@ -56,7 +55,6 @@ public class PermissionsAsk extends AppCompatActivity {
 
         // permissions check
         if (!havePermissions(PermissionsAsk.this)) {
-            Log.i(TAG, "CREATE::Requesting permissions needed for this app.");
             requestPermissions();
         }
     }

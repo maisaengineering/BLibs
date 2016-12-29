@@ -8,7 +8,7 @@ import android.util.Log;
 
 import org.tingr.blibs.R;
 import org.tingr.blibs.utils.PermissionsAsk;
-import org.tingr.blibs.utils.Utils;
+import org.tingr.blibs.services.Utils;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getName();

@@ -11,13 +11,12 @@ import com.google.android.gms.nearby.messages.Distance;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
 
-import org.tingr.blibs.utils.Utils;
-
 /**
  * Created by imaginationcoder on 12/13/16.
  */
 public class BGBSubService extends IntentService {
     private static final String TAG = BGBSubService.class.getName();
+    private static String KEY_DATA = "DATA";
 
     public BGBSubService() {
         super(BGBSubService.class.getSimpleName());
@@ -41,15 +40,16 @@ public class BGBSubService extends IntentService {
             public void onFound(Message message) {
                 try {
                     Log.i(TAG, "onFound message = " + message);
-                    Log.i(TAG, "namespaced/type..." + message.getNamespace() +
-                            "/" + message.getType());
-                    Log.i(TAG, "intent..." + intent);
+                    // anybody intetrested to know?
+                    String receiverAction = Utils.getValForKey(getApplicationContext(), Utils.CALLBACK_FOUND);
+                    if (receiverAction != null) {
+                        Intent bIntent = new Intent();
+                        bIntent.setAction(receiverAction);
+                        bIntent.putExtra(KEY_DATA, message.getContent());
 
-                    Intent bIntent = new Intent();
-                    bIntent.setAction(Utils.BROADCAST_KEY_DETECTED);
-                    bIntent.putExtra(Utils.BEACON.STATE.name(), Utils.BEACON.FOUND.name());
-                    bIntent.putExtra(Utils.BEACON.DATA.name(), message.getContent());
-                    sendBroadcast(bIntent);
+                        // broadcast now
+                        sendBroadcast(bIntent);
+                    }
                 } catch (Throwable t) {
                     // muted
                 } finally {
@@ -63,11 +63,16 @@ public class BGBSubService extends IntentService {
             public void onLost(Message message) {
                 try {
                     Log.i(TAG, "onLost message = " + message);
-                    Intent bIntent = new Intent();
-                    bIntent.setAction(Utils.BROADCAST_KEY_DETECTED);
-                    bIntent.putExtra(Utils.BEACON.STATE.name(), Utils.BEACON.LOST.name());
-                    bIntent.putExtra(Utils.BEACON.DATA.name(), message.getContent());
-                    sendBroadcast(bIntent);
+                    // anybody intetrested to know?
+                    String receiverAction = Utils.getValForKey(getApplicationContext(), Utils.CALLBACK_LOST);
+                    if (receiverAction != null) {
+                        Intent bIntent = new Intent();
+                        bIntent.setAction(receiverAction);
+                        bIntent.putExtra(KEY_DATA, message.getContent());
+
+                        // broadcast now
+                        sendBroadcast(bIntent);
+                    }
                 } catch (Throwable t) {
                     // muted
                 } finally {
@@ -96,8 +101,8 @@ public class BGBSubService extends IntentService {
                 }
             }
 
-            Log.i(TAG, "***isRunning = " + isRunning);
             if (!isRunning) {
+                Log.i(TAG, "scheduling for periodic runs.");
                 Utils.schedulePeriodicTask(getApplicationContext());
             }
         } catch (Throwable t) {

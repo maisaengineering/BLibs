@@ -1,13 +1,13 @@
-package org.tingr.blibs.utils;
+package org.tingr.blibs.services;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.util.Log;
-
-import org.tingr.blibs.services.BlibsServc;
 
 /**
  * Created by imaginationcoder on 12/14/16.
@@ -15,13 +15,14 @@ import org.tingr.blibs.services.BlibsServc;
 public final class Utils {
     private static final String TAG = Utils.class.getName();
 
-    public static final String BROADCAST_KEY_DETECTED = "org.tingr.blibs.DETECTED";
-    public static enum BEACON {
-        STATE,
-        FOUND,
-        LOST,
-        DATA,
-    };
+    /**
+     * CLIENT INTEGRATIONS
+     */
+    static final String INIT_NAMESPACE = "org.tingr.blibs.init.namespace";
+    static final String INIT_TYPE = "org.tingr.blibs.init.type";
+
+    static final String CALLBACK_FOUND = "org.tingr.blibs.callback.found";
+    static final String CALLBACK_LOST = "org.tingr.blibs.callback.lost";
 
     public static void schedulePeriodicTask(Context aContext) {
         try {
@@ -57,13 +58,17 @@ public final class Utils {
         }
     }
 
-    /**
-     * Check for Bluetooth.
-     *
-     * @return True if Bluetooth is available.
-     */
-    public static boolean isBluetoothAvailable() {
-        final BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        return (bluetoothAdapter != null && bluetoothAdapter.isEnabled());
+    static String getValForKey(Context context, String key) {
+        try {
+            ApplicationInfo appInfo = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
+            Bundle bundle = appInfo.metaData;
+            Object val = bundle == null ? null : bundle.get(key);
+            return (String) val;
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, e.getMessage());
+        }
+
+        return null;
     }
 }
