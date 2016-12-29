@@ -17,7 +17,9 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.nearby.Nearby;
+import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageFilter;
+import com.google.android.gms.nearby.messages.Messages;
 import com.google.android.gms.nearby.messages.MessagesOptions;
 import com.google.android.gms.nearby.messages.NearbyMessagesStatusCodes;
 import com.google.android.gms.nearby.messages.NearbyPermissions;
@@ -190,12 +192,12 @@ public class BlibsServc extends IntentService {
         return "TINGR";
     }
 
-    public static SubscribeOptions subOptions(Context contest, SubscribeCallback subsCallbak) {
-        String namespace = Utils.getValForKey(contest, Utils.INIT_NAMESPACE);
+    public static SubscribeOptions subOptions(Context context, SubscribeCallback subsCallbak) {
+        String namespace = Utils.getValForKey(context, Utils.INIT_NAMESPACE);
         if(namespace == null){
             throw new IllegalStateException(String.format("'%s' is missing from Manifest.", Utils.INIT_NAMESPACE));
         }
-        String type = Utils.getValForKey(contest, Utils.INIT_TYPE);
+        String type = Utils.getValForKey(context, Utils.INIT_TYPE);
         if(type == null){
             throw new IllegalStateException(String.format("'%s' is missing from Manifest.", Utils.INIT_TYPE));
         }

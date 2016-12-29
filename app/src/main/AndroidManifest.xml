@@ -20,6 +20,7 @@
         <!-- ####################### -->
         <!-- LIBRARY INITIALIZERS & CALLBACKS -->
         <!-- ####################### -->
+        <!-- INITIALIZERS (required) -->
         <meta-data
             android:name="org.tingr.blibs.init.type"
             android:value="parent" />
@@ -30,6 +31,7 @@
             android:name="com.google.android.nearby.messages.API_KEY"
             android:value="AIzaSyCM9KoMI_iXz9MLaOLBKlOeh0ATuS2FoVI" />
 
+        <!-- CALLBACKS (optional) -->
         <meta-data
             android:name="org.tingr.blibs.callback.found"
             android:value="org.tingr.blibs.iDETECTED" />
