@@ -10,34 +10,28 @@
         android:name="android.permission.BLUETOOTH"
         android:required="false" />
 
-    <application
-        android:allowBackup="false"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:supportsRtl="true"
-        android:theme="@android:style/Theme.NoTitleBar">
-
+    <application>
         <!-- ####################### -->
         <!-- LIBRARY INITIALIZERS & CALLBACKS -->
         <!-- ####################### -->
         <!-- INITIALIZERS (required) -->
-        <meta-data
-            android:name="org.tingr.blibs.init.type"
-            android:value="parent" />
-        <meta-data
-            android:name="org.tingr.blibs.init.namespace"
-            android:value="tingr-152315" />
-        <meta-data
-            android:name="com.google.android.nearby.messages.API_KEY"
-            android:value="AIzaSyCM9KoMI_iXz9MLaOLBKlOeh0ATuS2FoVI" />
+        <!--<meta-data-->
+            <!--android:name="org.tingr.blibs.init.type"-->
+            <!--android:value="parent" />-->
+        <!--<meta-data-->
+            <!--android:name="org.tingr.blibs.init.namespace"-->
+            <!--android:value="tingr-152315" />-->
+        <!--<meta-data-->
+            <!--android:name="com.google.android.nearby.messages.API_KEY"-->
+            <!--android:value="AIzaSyCM9KoMI_iXz9MLaOLBKlOeh0ATuS2FoVI" />-->
 
         <!-- CALLBACKS (optional) -->
-        <meta-data
-            android:name="org.tingr.blibs.callback.found"
-            android:value="org.tingr.blibs.iDETECTED" />
-        <meta-data
-            android:name="org.tingr.blibs.callback.lost"
-            android:value="org.tingr.blibs.iDETECTED" />
+        <!--<meta-data-->
+            <!--android:name="org.tingr.blibs.callback.found"-->
+            <!--android:value="org.tingr.blibs.iDETECTED" />-->
+        <!--<meta-data-->
+            <!--android:name="org.tingr.blibs.callback.lost"-->
+            <!--android:value="org.tingr.blibs.iDETECTED" />-->
 
         <!-- ####################### -->
         <!-- SERVICES -->
@@ -89,29 +83,29 @@
             </intent-filter>
         </receiver>
 
-        <!-- ####################### -->
-        <!-- DEMO RELATED HERE ONWARDS -->
-        <!-- ####################### -->
-        <receiver
-            android:name=".demo.BlibsReceiver"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="org.tingr.blibs.iDETECTED" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </receiver>
+        <!--&lt;!&ndash; ####################### &ndash;&gt;-->
+        <!--&lt;!&ndash; DEMO RELATED HERE ONWARDS &ndash;&gt;-->
+        <!--&lt;!&ndash; ####################### &ndash;&gt;-->
+        <!--<receiver-->
+            <!--android:name=".demo.BlibsReceiver"-->
+            <!--android:enabled="true"-->
+            <!--android:exported="true">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="org.tingr.blibs.iDETECTED" />-->
+                <!--<category android:name="android.intent.category.DEFAULT" />-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
 
-        <activity
-            android:name=".demo.MainActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.AppCompat.Light">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <!--<activity-->
+            <!--android:name=".demo.MainActivity"-->
+            <!--android:configChanges="orientation|keyboardHidden|screenSize"-->
+            <!--android:label="@string/app_name"-->
+            <!--android:theme="@style/Theme.AppCompat.Light">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        <!--</activity>-->
     </application>
 
 </manifest>

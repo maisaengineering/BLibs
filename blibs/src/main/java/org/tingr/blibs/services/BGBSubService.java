@@ -49,6 +49,8 @@ public class BGBSubService extends IntentService {
 
                         // broadcast now
                         sendBroadcast(bIntent);
+                    } else {
+                        Log.i(TAG, " ***receiverAction is null");
                     }
                 } catch (Throwable t) {
                     // muted
@@ -72,6 +74,8 @@ public class BGBSubService extends IntentService {
 
                         // broadcast now
                         sendBroadcast(bIntent);
+                    } else {
+                        Log.i(TAG, " ***receiverAction is null");
                     }
                 } catch (Throwable t) {
                     // muted
