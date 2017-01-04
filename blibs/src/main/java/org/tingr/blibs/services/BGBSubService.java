@@ -39,8 +39,7 @@ public class BGBSubService extends IntentService {
             @Override
             public void onFound(Message message) {
                 try {
-                    Log.i(TAG, "onFound message = " + message);
-                    // anybody intetrested to know?
+                    // anybody interested?
                     String receiverAction = Utils.getValForKey(getApplicationContext(), Utils.CALLBACK_FOUND);
                     if (receiverAction != null) {
                         Intent bIntent = new Intent();
@@ -50,7 +49,8 @@ public class BGBSubService extends IntentService {
                         // broadcast now
                         sendBroadcast(bIntent);
                     } else {
-                        Log.i(TAG, " ***receiverAction is null");
+                        Log.i(TAG, String.format("ON-FOUND MSG=%s CONTENT=%s", new String[]{message.toString(), new String(message.getContent())}));
+                        Log.i(TAG, " ***no receiver found!!!");
                     }
                 } catch (Throwable t) {
                     // muted
@@ -58,14 +58,12 @@ public class BGBSubService extends IntentService {
                     // conditionally start service
                     condStartServc();
                 }
-
             }
 
             @Override
             public void onLost(Message message) {
                 try {
-                    Log.i(TAG, "onLost message = " + message);
-                    // anybody intetrested to know?
+                    // anybody interested?
                     String receiverAction = Utils.getValForKey(getApplicationContext(), Utils.CALLBACK_LOST);
                     if (receiverAction != null) {
                         Intent bIntent = new Intent();
@@ -75,7 +73,8 @@ public class BGBSubService extends IntentService {
                         // broadcast now
                         sendBroadcast(bIntent);
                     } else {
-                        Log.i(TAG, " ***receiverAction is null");
+                        Log.i(TAG, String.format("ON-LOST MSG=%s CONTENT=%s", new String[]{message.toString(), new String(message.getContent())}));
+                        Log.i(TAG, " ***no receiver found!!!");
                     }
                 } catch (Throwable t) {
                     // muted

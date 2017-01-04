@@ -18,8 +18,7 @@ public final class Utils {
     /**
      * CLIENT INTEGRATIONS
      */
-    static final String INIT_NAMESPACE = "org.tingr.blibs.init.namespace";
-    static final String INIT_TYPE = "org.tingr.blibs.init.type";
+    static final String INIT_NAMESPACE_TYPE = "org.tingr.blibs.init.namespacetype";
 
     static final String CALLBACK_FOUND = "org.tingr.blibs.callback.found";
     static final String CALLBACK_LOST = "org.tingr.blibs.callback.lost";
@@ -70,5 +69,17 @@ public final class Utils {
         }
 
         return null;
+    }
+
+   public static String getAppPackageName(Context context) {
+        try {
+            ApplicationInfo appInfo = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
+            return (String) appInfo.packageName;
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, e.getMessage());
+        }
+
+        return "";
     }
 }

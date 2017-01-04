@@ -16,7 +16,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import org.tingr.blibs.BuildConfig;
 import org.tingr.blibs.R;
 import org.tingr.blibs.services.Utils;
 
@@ -30,15 +29,21 @@ public class PermissionsAsk extends AppCompatActivity {
     public static final String SETTINGS = "Settings";
 
     public static final String PERMISSION_RATIONALE = "Location permission is req'd.";
-    public static final String PERMISSION_DENIED_EXPLANATION = "While we wait, provide req'd permissions by going to " + SETTINGS;
+    public static final String PERMISSION_DENIED_EXPLANATION = "Please provide req'd permissions. Got to " + SETTINGS;
 
     private FrameLayout mContainer;
+
+    private boolean mWaiting4Permission;
 
     @Override
     protected void onResume() {
         super.onResume();
         if (havePermissions(PermissionsAsk.this)) {
             returnAsSuccessful();
+        } else if (!mWaiting4Permission) {
+            // returnAsFailed();
+            mWaiting4Permission = Boolean.TRUE;
+            requestPermissions();
         }
     }
 
@@ -88,6 +93,9 @@ public class PermissionsAsk extends AppCompatActivity {
     }
 
     private void requestPermissions() {
+        // permission req state preserve
+        mWaiting4Permission = Boolean.TRUE;
+
         ActivityCompat.requestPermissions(this, permissionsToAsk(), PERMISSIONS_REQUEST_CODE);
     }
 
@@ -97,7 +105,10 @@ public class PermissionsAsk extends AppCompatActivity {
             return;
         }
 
-        Snackbar.make(mContainer,
+        // permission req state preserve
+        mWaiting4Permission = Boolean.TRUE;
+
+        Snackbar sb = Snackbar.make(mContainer,
                 PERMISSION_DENIED_EXPLANATION,
                 Snackbar.LENGTH_INDEFINITE)
                 .setAction(SETTINGS, new View.OnClickListener() {
@@ -106,19 +117,32 @@ public class PermissionsAsk extends AppCompatActivity {
                         // go to APP SETTINGS
                         Intent intent = new Intent();
                         intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                        Uri uri = Uri.fromParts(PACKAGE,
-                                BuildConfig.APPLICATION_ID, null);
+                        Uri uri = Uri.fromParts(PACKAGE, Utils.getAppPackageName(getApplicationContext()), null);
                         intent.setData(uri);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
+                        startActivityForResult(intent, PERMISSIONS_REQUEST_CODE);
                     }
-                }).show();
+
+                });
+        sb.setCallback(new Snackbar.Callback() {
+            @Override
+            public void onDismissed(Snackbar snackbar, int event) {
+                mWaiting4Permission = Boolean.FALSE;
+                super.onDismissed(snackbar, event);
+            }
+        });
+
+        sb.show();
     }
 
     private void showRequestPermissionsSnackbar() {
         if (mContainer == null) {
             return;
         }
+
+        // permission req state preserve
+        mWaiting4Permission = Boolean.TRUE;
+
         Snackbar.make(mContainer, PERMISSION_RATIONALE,
                 Snackbar.LENGTH_INDEFINITE)
                 .setAction(OK, new View.OnClickListener() {
@@ -138,6 +162,9 @@ public class PermissionsAsk extends AppCompatActivity {
         if (requestCode != PERMISSIONS_REQUEST_CODE) {
             return;
         }
+
+        // permission req state preserve
+        mWaiting4Permission = Boolean.FALSE;
 
         boolean isGranted = true;
         // permission handling
@@ -166,6 +193,12 @@ public class PermissionsAsk extends AppCompatActivity {
 
         Intent output = new Intent();
         setResult(RESULT_OK, output);
+        finish();
+    }
+
+    private void returnAsFailed() {
+        Intent output = new Intent();
+        setResult(RESULT_CANCELED, output);
         finish();
     }
 

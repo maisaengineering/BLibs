@@ -191,24 +191,32 @@ public class BlibsServc extends IntentService {
     }
 
     public static SubscribeOptions subOptions(Context context, SubscribeCallback subsCallbak) {
-        String namespace = Utils.getValForKey(context, Utils.INIT_NAMESPACE);
-        if (namespace == null) {
-            throw new IllegalStateException(String.format("'%s' is missing from Manifest.", Utils.INIT_NAMESPACE));
+        String nsTypeStr = Utils.getValForKey(context, Utils.INIT_NAMESPACE_TYPE);
+        if (nsTypeStr == null) {
+            throw new IllegalStateException(String.format("'%s' is missing from Manifest.", Utils.INIT_NAMESPACE_TYPE));
         }
-        String type = Utils.getValForKey(context, Utils.INIT_TYPE);
-        if (type == null) {
-            throw new IllegalStateException(String.format("'%s' is missing from Manifest.", Utils.INIT_TYPE));
+
+        MessageFilter.Builder msgFilterBldr = new MessageFilter.Builder();
+
+        // grab comma seperated namespace-type combinations
+        String[] nsTypeArr;
+        for (String nsType : nsTypeStr.split(",")) {
+            nsTypeArr = nsType.split("/");
+            msgFilterBldr.includeNamespacedType(nsTypeArr[0], nsTypeArr[1]);
         }
 
         // strategy
 //        Strategy strategy = new Strategy.Builder().setTtlSeconds(Strategy.TTL_SECONDS_INFINITE).zzlP(2).build();
+//
+//        MessageFilter messageFilter = new MessageFilter.Builder()
+//                .includeEddystoneUids(MY_EDDYSTONE_UID_NAMESPACE, null /* any instance */)
+//                .build();
+
         return new SubscribeOptions.Builder()
 //                .setCallback(subsCallbak)
 //                .setStrategy(strategy)
                 .setStrategy(Strategy.BLE_ONLY)
-                .setFilter(new MessageFilter.Builder()
-                        .includeNamespacedType(namespace, type)
-                        .build()).build();
+                .setFilter(msgFilterBldr.build()).build();
     }
 
     private void notifyAsBluetoothReqd() {
